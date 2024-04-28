@@ -1,10 +1,12 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image, FlatList } from 'react-native'
+import { StyleSheet, TouchableOpacity, View, Image, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import themeStyles from '../styles/themeStyles';
+import globalStyles from '../styles/globalStyles';
 import CustomText from '../components/CustomText';
 import { useGetChaptersQuery, useGetSubjectsQuery } from '../redux/storeApis';
 import { useNavigation } from '@react-navigation/native';
 import { ROUTES } from '../routes/RouteConstants';
+import CustomStatusBar from '../components/CustomStatusBar';
 
 const HomeScreen = () => {
 
@@ -50,7 +52,8 @@ const HomeScreen = () => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{...globalStyles.container}}>
+      <CustomStatusBar backgroundColor={themeStyles.SECONDARY}/>
 
       <ViewHeader/>
 
@@ -72,23 +75,26 @@ const HomeScreen = () => {
         })}
       </View>}
 
-     { isLessonExist && <FlatList data={allLessons} 
-        contentContainerStyle={styles.allLessonsContainer} 
-        numColumns={2}
-        keyExtractor={(index) => index.toString()}
-        renderItem={({item, index})=>{
-          const lessonId = item?._id?._id;
-          return(
-           <TouchableOpacity activeOpacity={0.7} onPress={()=> navigation.navigate(ROUTES.screenQuiz, { lessonId })} style={styles.allLessonsBox}>
-            <View key={index} style={styles.lessonNameBox}>
-              <Image source={require('../assets/images/lessonIcon.png')} style={{height:70, width:70}} />
-              <CustomText white >{`Lesson ${index+1}`}</CustomText>
-            </View>
-            <CustomText>{item?._id?.chapter_name}</CustomText>
-           </TouchableOpacity>
-          )
-      }} 
-      />}
+     <View style={styles.flatListContainer}>
+      { isLessonExist &&
+        <FlatList data={allLessons} 
+          contentContainerStyle={styles.allLessonsContainer} 
+          numColumns={2}
+          keyExtractor={(index) => index.toString()}
+          renderItem={({item, index})=>{
+            const lessonId = item?._id?._id;
+            return(
+            <TouchableOpacity activeOpacity={0.7} onPress={()=> navigation.navigate(ROUTES.screenQuiz, { lessonId })} style={styles.allLessonsBox}>
+              <View key={index} style={styles.lessonNameBox}>
+                <Image source={require('../assets/images/lessonIcon.png')} style={{height:70, width:70}} />
+                <CustomText white >{`Lesson ${index+1}`}</CustomText>
+              </View>
+              <CustomText>{item?._id?.chapter_name}</CustomText>
+            </TouchableOpacity>
+            )
+        }} 
+        />}
+     </View>
 
     </View>
   )
@@ -103,8 +109,9 @@ const styles = StyleSheet.create({
   subjectBox :{ flexDirection:'row', alignItems:'center', justifyContent:'space-between', paddingHorizontal:'5%', marginTop:'5%' },
   allSubjectsBox:{flexDirection:'row', paddingHorizontal:'5%', marginTop:'5%', gap:22,},
   subjectNameBox:{paddingHorizontal:'3%', paddingVertical:'2%', borderRadius:5, minWidth:'18%', flexDirection:'row', alignItems:'center', justifyContent:'center', gap:5, borderColor: themeStyles.SECONDARY, backgroundColor: themeStyles.PRIMARY,},
-  allLessonsContainer:{alignSelf:'center', paddingHorizontal:'10%',paddingVertical:'5%', backgroundColor:themeStyles.LIGHT, borderRadius:24, marginTop:'5%'},
+  allLessonsContainer:{alignSelf:'center', paddingHorizontal:'5%',paddingVertical:'5%', },
   allLessonsBox:{width:'50%', alignItems:'center',},
   lessonNameBox:{ height:120, width:120, borderRadius:60, alignItems:'center', justifyContent:'center', 
   backgroundColor:themeStyles.PRIMARY, marginHorizontal:'5%', marginVertical:'5%',  },
+  flatListContainer:{backgroundColor:themeStyles.LIGHT, borderRadius:24, marginTop:'5%'}
 });

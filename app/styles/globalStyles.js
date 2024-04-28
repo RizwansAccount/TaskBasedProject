@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native"
+import { StyleSheet, StatusBar } from "react-native"
 import themeStyles from "./themeStyles"
 const fontFamily = {
     semibold:'Manrope-SemiBold',
@@ -7,6 +7,7 @@ const fontFamily = {
     bold:'Manrope-Bold',
   }
  const globalStyles = StyleSheet.create({
+    container:{flex:1, backgroundColor: themeStyles.WHITE, paddingTop: StatusBar.currentHeight },
     shadowDefault:{
         shadowColor: '#000', 
         shadowOffset: { width: 0, height: 5 }, 

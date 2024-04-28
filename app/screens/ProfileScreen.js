@@ -1,9 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import globalStyles from '../styles/globalStyles'
 
 const ProfileScreen = () => {
   return (
-    <View>
+    <View style={{...globalStyles.container}} >
       <Text>ProfileScreen</Text>
     </View>
   )

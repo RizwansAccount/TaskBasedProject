@@ -10,19 +10,19 @@ const QuizScreen = () => {
     const quizData = [
         {
             id: 1,
-            type: 'hint',
+            type: 'info',
             question: 'here is method how to multiply',
             image: "https://upload.wikimedia.org/wikipedia/commons/5/57/Simple_multiplication.png",
         },
         {
             id: 2,
-            type: 'hint',
+            type: 'info',
             question: 'here is single num multiplication',
             image: "https://upload.wikimedia.org/wikipedia/commons/5/57/Simple_multiplication.png",
         },
         {
             id: 3,
-            type: 'hint',
+            type: 'info',
             question: 'here is double num multiplication',
             image: "https://upload.wikimedia.org/wikipedia/commons/5/57/Simple_multiplication.png",
         },
@@ -50,8 +50,6 @@ const QuizScreen = () => {
         },
     ];
     const questionTypes = { info:'info', mcqs:'mcqs' };
-    const isMcqs = currentQuestion?.type == questionTypes.mcqs;
-    const isInfo = currentQuestion?.type == questionTypes.info;
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [currentQuestion, setCurrentQuestion] = useState(null);
@@ -67,8 +65,8 @@ const QuizScreen = () => {
         <View  style={{flex:1}}>
                 <View>
                     <CustomText secondary heading style={styles.questionText}>{currentQuestion?.question}</CustomText>
-                    {isInfo && <Image resizeMode='contain' source={{ uri: currentQuestion?.image }} style={styles.image} />}
-                    {isMcqs && currentQuestion?.options?.map((option, index)=>{
+                    {currentQuestion?.type == questionTypes.info && <Image resizeMode='contain' source={{ uri: currentQuestion?.image }} style={styles.image} />}
+                    {currentQuestion?.type == questionTypes.mcqs && currentQuestion?.options?.map((option, index)=>{
                         return (
                             <TouchableOpacity key={index} style={styles.mcqBox} onPress={()=>fnOnNextQuestion()}>
                                 <CustomText>{option?.answer}</CustomText>
