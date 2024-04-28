@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import CustomText from '../components/CustomText';
 import themeStyles from '../styles/themeStyles';
+import globalStyles from '../styles/globalStyles';
 
 const QuizScreen = () => {
 
@@ -44,8 +45,8 @@ const QuizScreen = () => {
             options: [
                 { isRight: false, answer: '62' },
                 { isRight: false, answer: '58' },
-                { isRight: false, answer: '64' },
-                { isRight: true, answer: '46' },
+                { isRight: true, answer: '64' },
+                { isRight: false, answer: '46' },
             ]
         },
     ];
@@ -53,30 +54,45 @@ const QuizScreen = () => {
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [currentQuestion, setCurrentQuestion] = useState(null);
+    const [selectedOption, setSelectedOption] = useState(null);
+    const [btnColor, setBtnColor] = useState(themeStyles.SECONDARY);
 
     useEffect(()=>{ setCurrentQuestion(quizData[currentIndex]) },[currentIndex]);
 
     const fnOnNextQuestion = () => {
-        if (currentIndex < quizData.length-1) { setCurrentIndex(prevIndex => prevIndex + 1); } 
-        else {  navigation.goBack();  }
+        if(currentQuestion?.type == questionTypes.mcqs) {
+            const selectedMcq = currentQuestion?.options?.find((x)=>x?.answer == selectedOption?.answer);
+            selectedMcq?.isRight == true ? setBtnColor('green'): setBtnColor('red');
+            setTimeout(() => {
+                setCurrentIndex(prevIndex => prevIndex + 1);
+                setBtnColor(themeStyles.SECONDARY);
+                setSelectedOption(false);
+                if(currentIndex >= quizData.length-1) { navigation.goBack() }
+            }, 1000);
+            return;
+        }
+        setCurrentIndex(prevIndex => prevIndex + 1);      
+        if(currentIndex >= quizData.length-1) { navigation.goBack() }
+            
     };
 
     return (
-        <View  style={{flex:1}}>
-                <View>
-                    <CustomText secondary heading style={styles.questionText}>{currentQuestion?.question}</CustomText>
-                    {currentQuestion?.type == questionTypes.info && <Image resizeMode='contain' source={{ uri: currentQuestion?.image }} style={styles.image} />}
-                    {currentQuestion?.type == questionTypes.mcqs && currentQuestion?.options?.map((option, index)=>{
-                        return (
-                            <TouchableOpacity key={index} style={styles.mcqBox} onPress={()=>fnOnNextQuestion()}>
-                                <CustomText>{option?.answer}</CustomText>
-                            </TouchableOpacity>
-                        )
-                    })}
-                    <TouchableOpacity onPress={()=>fnOnNextQuestion()} style={{ backgroundColor: themeStyles.SECONDARY, width: '90%', alignSelf: 'center', borderRadius: 10, alignItems: 'center', paddingVertical: '5%', marginTop: '5%' }} >
-                        <CustomText white style={{ fontSize: 22 }}>Next</CustomText>
-                    </TouchableOpacity>
-                </View>
+        <View style={{...globalStyles.container}}>
+            <CustomText secondary heading style={styles.questionText}>{`Question : ${currentQuestion?.question}`}</CustomText>
+            {currentQuestion?.type == questionTypes.info && <Image resizeMode='contain' source={{ uri: currentQuestion?.image }} style={styles.image} />}
+            {currentQuestion?.type == questionTypes.mcqs && <View style={styles.mcqContainer}>
+                {currentQuestion?.options?.map((option, index)=>{
+                    return (
+                        <TouchableOpacity key={index} style={[styles.mcqBox, selectedOption?.answer == option.answer && { borderWidth: 2}]} onPress={()=>{setSelectedOption(option)}}>
+                            <CustomText secondary heading >{option?.answer}</CustomText>
+                        </TouchableOpacity>
+                    )
+                })}
+            </View>
+            }
+            <TouchableOpacity onPress={()=>fnOnNextQuestion()} disabled={currentQuestion?.type == questionTypes.mcqs && !selectedOption} style={{ backgroundColor:currentQuestion?.type == questionTypes.mcqs && !selectedOption ? themeStyles.LIGHT_GREY : btnColor, width: '90%', alignSelf: 'center', borderRadius: 10, alignItems: 'center', paddingVertical: '5%', marginTop: '5%' }} >
+                <CustomText white style={{ fontSize: 22 }}>{(currentQuestion?.type == questionTypes.mcqs) ? 'Save' : 'Next'}</CustomText>
+            </TouchableOpacity>
         </View>
     )
 }
@@ -84,9 +100,8 @@ const QuizScreen = () => {
 export default QuizScreen;
 
 const styles = StyleSheet.create({
-    image: {
-        height: 300, width: '95%', alignSelf: 'center'
-    },
+    image: { height: 300, width: '95%', alignSelf: 'center' },
     questionText:{ fontSize: 20, marginVertical: '2%', paddingHorizontal: '2%' },
-    mcqBox:{ borderColor: themeStyles.SECONDARY, padding: 10, borderWidth: 1 }
+    mcqBox:{ borderColor: themeStyles.SECONDARY, padding: 10, borderWidth: 1, width:'45%', marginVertical:'2.5%', borderRadius:5 },
+    mcqContainer:{flexDirection:'row', justifyContent:'space-around', flexWrap:'wrap'}
 });

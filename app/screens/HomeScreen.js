@@ -108,10 +108,10 @@ const styles = StyleSheet.create({
   ratingTxt:{ position:'absolute', width:50, backgroundColor: '#53656D', justifyContent:'center', alignItems:'center', paddingVertical:'2%',borderRadius:50,bottom:-5 },
   subjectBox :{ flexDirection:'row', alignItems:'center', justifyContent:'space-between', paddingHorizontal:'5%', marginTop:'5%' },
   allSubjectsBox:{flexDirection:'row', paddingHorizontal:'5%', marginTop:'5%', gap:22,},
-  subjectNameBox:{paddingHorizontal:'3%', paddingVertical:'2%', borderRadius:5, minWidth:'18%', flexDirection:'row', alignItems:'center', justifyContent:'center', gap:5, borderColor: themeStyles.SECONDARY, backgroundColor: themeStyles.PRIMARY,},
+  subjectNameBox:{paddingHorizontal:'3%', paddingVertical:'2%', borderRadius:5, minWidth:'18%', flexDirection:'row', alignItems:'center', justifyContent:'center', gap:5, borderColor: themeStyles.SECONDARY, backgroundColor: themeStyles.LIGHT,},
   allLessonsContainer:{alignSelf:'center', paddingHorizontal:'5%',paddingVertical:'5%', },
   allLessonsBox:{width:'50%', alignItems:'center',},
   lessonNameBox:{ height:120, width:120, borderRadius:60, alignItems:'center', justifyContent:'center', 
   backgroundColor:themeStyles.PRIMARY, marginHorizontal:'5%', marginVertical:'5%',  },
-  flatListContainer:{backgroundColor:themeStyles.LIGHT, borderRadius:24, marginTop:'5%'}
+  flatListContainer:{backgroundColor:themeStyles.LIGHT, borderRadius:24, marginTop:'5%', minHeight:400}
 });
