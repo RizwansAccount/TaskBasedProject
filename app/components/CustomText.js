@@ -9,11 +9,11 @@ const CustomText = ({children, style, numberOfLines, heading, black, white, prim
     : white ? themeStyles.WHITE 
     : primary ? themeStyles.PRIMARY 
     : secondary ? themeStyles.SECONDARY 
-    : themeStyles.LIGHT;
+    : themeStyles.LIGHT_GREY;
 
   return (
     <Text 
-        style={[styles.txt, style, { color: textColor }, heading && {fontWeight:'bold', fontSize:22} ]} 
+        style={[styles.txt, style, { color: textColor }, heading && {fontWeight:'bold', fontSize:18} ]} 
         numberOfLines={numberOfLines}>
         {children}
     </Text>
