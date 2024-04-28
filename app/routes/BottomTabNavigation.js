@@ -10,9 +10,9 @@ const Tab = createBottomTabNavigator();
 
 const ViewTab = ({ routeName, focused }) => {
     return (
-        routeName == ROUTES.screenHome ? <HomeIcon color={focused && themeStyles.SECONDARY_COLOR} />
-        : routeName == ROUTES.screenProfile ? <ProfileIcon color={focused && themeStyles.SECONDARY_COLOR} />
-        : <ShopIcon color={focused && themeStyles.SECONDARY_COLOR} size={20} />
+        routeName == ROUTES.screenHome ? <HomeIcon color={focused && themeStyles.SECONDARY} />
+        : routeName == ROUTES.screenProfile ? <ProfileIcon color={focused && themeStyles.SECONDARY} />
+        : <ShopIcon color={focused && themeStyles.SECONDARY} size={20} />
     )
 }
 
