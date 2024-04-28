@@ -3,20 +3,25 @@ import React, { useEffect, useState } from 'react'
 import themeStyles from '../styles/themeStyles';
 import CustomText from '../components/CustomText';
 import { useGetChaptersQuery, useGetSubjectsQuery } from '../redux/storeApis';
+import { useNavigation } from '@react-navigation/native';
+import { ROUTES } from '../routes/RouteConstants';
 
 const HomeScreen = () => {
 
+  const navigation = useNavigation();
+
   const user_id = '65edc62cc1aa0078000f9c01';
   const grade_id = '6625514923f87505231c8f89';
-
   const passingData = {user_id, grade_id};
-
-  const { data: allSubjects, isSuccess : isSuccessSubjects } = useGetSubjectsQuery(passingData);
-  const defaultSelectedSubjectId = allSubjects?.[0]?._id;
-
+  
   const [subjectId, setSubjectId] = useState(null);
-
-  const { data : allLessons, isSuccess : isSuccessLessons } = useGetChaptersQuery(subjectId?? defaultSelectedSubjectId);
+  
+  const { data: allSubjects, isSuccess : isSuccessSubjects } = useGetSubjectsQuery(passingData);
+  const { data : allLessons, isSuccess : isSuccessLessons } = useGetChaptersQuery(subjectId?? allSubjects?.[0]?._id);
+  
+  const isSubjectExist = allSubjects?.length > 0;
+  const isLessonExist = allLessons?.length > 0;
+  const defaultSelectedSubjectId = allSubjects?.[0]?._id;
 
   useEffect(()=>{ setSubjectId(defaultSelectedSubjectId); },[isSuccessSubjects]);
 
@@ -56,7 +61,7 @@ const HomeScreen = () => {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.allSubjectsBox}>
+     { isSubjectExist && <View style={styles.allSubjectsBox}>
         {allSubjects?.map((subDetail, i)=>{
           return (
             <TouchableOpacity onPress={()=> setSubjectId(subDetail?._id)} key={i} style={[styles.subjectNameBox, subDetail?._id == subjectId && {borderWidth: 1}]}>
@@ -65,23 +70,25 @@ const HomeScreen = () => {
             </TouchableOpacity>
           )
         })}
-      </View>
+      </View>}
 
-      <FlatList data={allLessons} 
+     { isLessonExist && <FlatList data={allLessons} 
         contentContainerStyle={styles.allLessonsContainer} 
         numColumns={2}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(index) => index.toString()}
         renderItem={({item, index})=>{
+          const lessonId = item?._id?._id;
           return(
-           <View style={styles.allLessonsBox}>
-            <TouchableOpacity key={index} style={styles.lessonNameBox}>
+           <TouchableOpacity activeOpacity={0.7} onPress={()=> navigation.navigate(ROUTES.screenQuiz, { lessonId })} style={styles.allLessonsBox}>
+            <View key={index} style={styles.lessonNameBox}>
               <Image source={require('../assets/images/lessonIcon.png')} style={{height:70, width:70}} />
               <CustomText white >{`Lesson ${index+1}`}</CustomText>
-            </TouchableOpacity>
-           </View>
+            </View>
+            <CustomText>{item?._id?.chapter_name}</CustomText>
+           </TouchableOpacity>
           )
       }} 
-      />
+      />}
 
     </View>
   )
