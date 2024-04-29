@@ -82,14 +82,14 @@ const HomeScreen = () => {
           numColumns={2}
           keyExtractor={(index) => index.toString()}
           renderItem={({item, index})=>{
-            const lessonId = item?._id?._id;
+            const chapterName = item?._id?.chapter_name;
             return(
-            <TouchableOpacity activeOpacity={0.7} onPress={()=> navigation.navigate(ROUTES.screenQuiz, { lessonId })} style={styles.allLessonsBox}>
+            <TouchableOpacity activeOpacity={0.7} onPress={()=> navigation.navigate(ROUTES.screenQuiz)} style={styles.allLessonsBox}>
               <View key={index} style={styles.lessonNameBox}>
                 <Image source={require('../assets/images/lessonIcon.png')} style={{height:70, width:70}} />
                 <CustomText white >{`Lesson ${index+1}`}</CustomText>
               </View>
-              <CustomText>{item?._id?.chapter_name}</CustomText>
+              <CustomText>{chapterName}</CustomText>
             </TouchableOpacity>
             )
         }} 
